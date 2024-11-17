@@ -1,5 +1,5 @@
-import { CreateServiceCommand, DeleteServiceCommand, DescribeServiceCommand, ImageRepositoryType, ListServicesCommand, SourceConfiguration, UpdateServiceCommand, TagResourceCommand, ListOperationsCommand } from "@aws-sdk/client-apprunner";
-import { ICodeConfiguration, ICreateOrUpdateActionParams, IImageConfiguration } from "./action-configuration";
+import { CreateServiceCommand, DeleteServiceCommand, DescribeServiceCommand, ImageRepositoryType, ListServicesCommand, SourceConfiguration, UpdateServiceCommand, TagResourceCommand, ListOperationsCommand, HealthCheckConfiguration } from "@aws-sdk/client-apprunner";
+import { ICodeConfiguration, ICreateOrUpdateActionParams, IHealthCheckConfiguration, IImageConfiguration } from "./action-configuration";
 
 export function getCreateCommand(config: ICreateOrUpdateActionParams): CreateServiceCommand {
     return new CreateServiceCommand({
@@ -14,6 +14,7 @@ export function getCreateCommand(config: ICreateOrUpdateActionParams): CreateSer
             ? getImageSourceConfiguration(config.port, config.sourceConfig, config.environment, config.environmentSecret)
             : getCodeSourceConfiguration(config.port, config.sourceConfig, config.environment, config.environmentSecret),
         Tags: config.tags,
+        HealthCheckConfiguration: getHealthCheckConfiguration(config.healthCheckConfig)
     });
 }
 
@@ -29,6 +30,7 @@ export function getUpdateCommand(serviceArn: string, config: ICreateOrUpdateActi
         SourceConfiguration: (config.sourceConfig.sourceType == 'image')
             ? getImageSourceConfiguration(config.port, config.sourceConfig, config.environment, config.environmentSecret)
             : getCodeSourceConfiguration(config.port, config.sourceConfig, config.environment, config.environmentSecret),
+        HealthCheckConfiguration: getHealthCheckConfiguration(config.healthCheckConfig),
     });
 }
 
@@ -110,4 +112,15 @@ function getImageSourceConfiguration(port: number, config: IImageConfiguration, 
             }
         }
     };
+}
+
+function getHealthCheckConfiguration(config: IHealthCheckConfiguration): HealthCheckConfiguration {
+    return {
+    Protocol: config.protocol,
+    Path: config.path,
+    Interval: config.interval,
+    Timeout: config.timout,
+    HealthyThreshold: config.healthyThreshold,
+    UnhealthyThreshold: config.unhealthyThreshold,
+    }
 }
