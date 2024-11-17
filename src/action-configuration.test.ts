@@ -1,4 +1,4 @@
-import { expect, test, describe } from "@jest/globals";
+import { expect, test, describe, it } from "@jest/globals";
 import { getConfig } from "./action-configuration";
 
 describe("getConfig", () => {
@@ -22,5 +22,16 @@ describe("getConfig", () => {
 
   test("autoscaling config ARN is undefined when input is not specified/empty", () => {
     expect(getConfig().autoScalingConfigArn).toBeUndefined();
+  })
+
+  it('should return tcp healtcheck protocol when path is not set', () => {
+    const config = getConfig();
+    expect(config.healthCheckConfig.protocol).toBe('TCP');
+  })
+
+  it('should return http healthcheck protocol when healthcheck-path is set', () => {
+    process.env["INPUT_HEALTHCHECK-PATH"] = "/health";
+    const config = getConfig();
+    expect(config.healthCheckConfig.protocol).toBe('HTTP');
   })
 })
