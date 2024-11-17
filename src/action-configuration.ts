@@ -23,6 +23,15 @@ export interface IImageConfiguration {
     accessRoleArn: string;
 }
 
+export interface IHealthCheckConfiguration {
+    protocol: 'HTTP' | 'TCP';
+    path?: string;
+    interval: number;
+    timout: number;
+    healthyThreshold: number;
+    unhealthyThreshold: number;
+}
+
 export interface ICreateOrUpdateActionParams {
     action: Actions.CreateOrUpdate;
     serviceName: string;
@@ -38,6 +47,7 @@ export interface ICreateOrUpdateActionParams {
     tags: Tag[]
     autoScalingConfigArn?: string;
     instanceRoleArn?: string;
+    healthCheckConfig?: IHealthCheckConfiguration;
 }
 
 export type IActionParams = ICreateOrUpdateActionParams;
@@ -139,6 +149,15 @@ function getCreateOrUpdateConfig(): ICreateOrUpdateActionParams {
 
     const instanceRoleArn = getOptionalInputStr('instance-role-arn', { trimWhitespace: true });
 
+    const healthCheckConfig: IHealthCheckConfiguration = {
+        protocol: getOptionalInputStr('healthcheck-path', { required: false, trimWhitespace: true }) ? 'HTTP' : 'TCP',
+        path: getOptionalInputStr('healthcheck-path', { required: false }),
+        interval: getInputNumber('healthcheck-interval', 5, { intOnly: true }),
+        timout: getInputNumber('healthcheck-timeout', 2, { intOnly: true }),
+        healthyThreshold: getInputNumber('healthcheck-healthy-threshold', 2, { intOnly: true }),
+        unhealthyThreshold: getInputNumber('healthcheck-unhealthy-threshold', 2, { intOnly: true }),
+    };
+
     return {
         action,
         serviceName,
@@ -154,6 +173,7 @@ function getCreateOrUpdateConfig(): ICreateOrUpdateActionParams {
         tags: getTags(tags),
         autoScalingConfigArn: autoScalingConfigArn,
         instanceRoleArn: instanceRoleArn,
+        healthCheckConfig: healthCheckConfig,
     };
 }
 
