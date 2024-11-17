@@ -72,7 +72,7 @@ inputs:
     description: 'ARN of an App Runner automatic scaling configuration that you want to associate with the App Runner service'
     required: false
   healthcheck-path:
-    description: 'The URL path that the App Runner service uses to perform health checks on the service'
+    description: 'The URL path that the App Runner service uses to perform health checks on the service. Setting this value configures the protocol to HTTP.'
     required: false
   healthcheck-timeout:
     description: 'Amount of time the load balancer waits for a health check response.'
