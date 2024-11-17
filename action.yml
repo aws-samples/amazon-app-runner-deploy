@@ -74,11 +74,11 @@ inputs:
   healthcheck-path:
     description: 'The URL path that the App Runner service uses to perform health checks on the service. Setting this value configures the protocol to HTTP.'
     required: false
-  healthcheck-timeout:
+  healthcheck-timeout-seconds:
     description: 'Amount of time the load balancer waits for a health check response.'
     default: '2'
     required: false
-  healthcheck-interval:
+  healthcheck-interval-seconds:
     description: 'Amount of time between health checks of an individual instance.'
     deafult: '5'
     required: false

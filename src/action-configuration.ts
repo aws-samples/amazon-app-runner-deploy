@@ -47,7 +47,7 @@ export interface ICreateOrUpdateActionParams {
     tags: Tag[]
     autoScalingConfigArn?: string;
     instanceRoleArn?: string;
-    healthCheckConfig?: IHealthCheckConfiguration;
+    healthCheckConfig: IHealthCheckConfiguration;
 }
 
 export type IActionParams = ICreateOrUpdateActionParams;
@@ -152,8 +152,8 @@ function getCreateOrUpdateConfig(): ICreateOrUpdateActionParams {
     const healthCheckConfig: IHealthCheckConfiguration = {
         protocol: getOptionalInputStr('healthcheck-path', { required: false, trimWhitespace: true }) ? 'HTTP' : 'TCP',
         path: getOptionalInputStr('healthcheck-path', { required: false }),
-        interval: getInputNumber('healthcheck-interval', 5, { intOnly: true }),
-        timout: getInputNumber('healthcheck-timeout', 2, { intOnly: true }),
+        interval: getInputNumber('healthcheck-interval-seconds', 5, { intOnly: true }),
+        timout: getInputNumber('healthcheck-timeout-seconds', 2, { intOnly: true }),
         healthyThreshold: getInputNumber('healthcheck-healthy-threshold', 2, { intOnly: true }),
         unhealthyThreshold: getInputNumber('healthcheck-unhealthy-threshold', 2, { intOnly: true }),
     };
