@@ -71,7 +71,7 @@ inputs:
   auto-scaling-config-arn:
     description: 'ARN of an App Runner automatic scaling configuration that you want to associate with the App Runner service'
     required: false
-  healtcheck-path:
+  healthcheck-path:
     description: 'The URL path that the App Runner service uses to perform health checks on the service'
     required: false
   healthcheck-timeout:
